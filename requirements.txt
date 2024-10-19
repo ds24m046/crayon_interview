@@ -1,0 +1,10 @@
+torch
+scikit-learn
+numpy
+pandas
+nltk
+mlflow
+dvc
+fastapi
+uvicorn
+pydantic
