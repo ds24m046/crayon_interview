@@ -1,0 +1,4 @@
+/model_config.json
+/vectorizer.pkl
+/model.pt
+/tag2idx.json
