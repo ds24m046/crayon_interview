@@ -32,7 +32,7 @@ def get_drifts(collection, limit=1000):
         
     return drifts
 
-def save_email(collection, email):
+def save_email(email, collection):
     
     record = {
         'timestamp': dt.now().isoformat(),
@@ -43,8 +43,8 @@ def save_email(collection, email):
     
     return result.inserted_id
 
-def save_drift(collection, drift):
-        
+def save_drift(drift, collection):
+    
     record = {'timestamp': dt.now().isoformat()}
     
     for key, val in drift.items():
