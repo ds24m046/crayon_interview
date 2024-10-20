@@ -3,14 +3,11 @@ import torch
 
 class Dataset(torch.utils.data.Dataset):
     
-    def __init__(self, X, y, vectorizer, encoder):
+    def __init__(self, X, y):
         
-        self.vectorizer = vectorizer
-        self.encoder = encoder
+        self.X = X
+        self.y = y
         
-        self.X = self.vectorizer.transform(X)
-        self.y = self.encoder.transform(y.reshape(-1, 1))
-    
     def __len__(self):
     
         return self.X.shape[0]

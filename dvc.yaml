@@ -1,16 +1,16 @@
 stages:
 
   preprocess:
-    cmd: python3 src/train/preprocess.py
+    cmd: python3 src/training/preprocess.py
     deps:
-      - src/train/preprocess.py
+      - src/training/preprocess.py
       - data/data.csv
     outs:
       - data/data.json
       - artifacts/tag2idx.json
 
   retrain:
-    cmd: python3 src/train/train.py
+    cmd: python3 src/training/train.py
     deps:
       - data/data.json
       - artifacts/tag2idx.json
@@ -18,4 +18,5 @@ stages:
       - artifacts/model_config.json
       - artifacts/vectorizer.pkl
       - artifacts/model.pt
+      - artifacts/distribution.pkl
   

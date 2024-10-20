@@ -22,27 +22,31 @@ if __name__ == "__main__":
     with open(os.path.join(load_path, 'data.json'), 'r') as file:
         data = json.load(file)
 
-    with open(os.path.join(load_path, 'tag2idx.json'), 'r') as file:
+    with open(os.path.join(save_path, 'tag2idx.json'), 'r') as file:
         tag2idx = json.load(file)
-
-    X_train = data['X_train']
-    X_test = data['X_test']
-    y_train = np.array(data['y_train'])
-    y_test = np.array(data['y_test'])
     
     print('Vectorizing dataset...')
     # TODO: logging
 
     vectorizer = TfidfVectorizer(min_df=5, max_df=0.75, analyzer='word', stop_words='english')
-    vectorizer.fit(X_train)
-
-    encoder = OneHotEncoder()
-    encoder.fit(y_train.reshape(-1, 1))
+    vectorizer.fit(data['X_train'])
     
-    train_dataset = datasets.Dataset(X_train, y_train, vectorizer, encoder)
+    X_train = vectorizer.transform(data['X_train'])
+    X_test = vectorizer.transform(data['X_test'])
+    
+    distribution = np.asarray(X_train.sum(axis=0)).squeeze()
+    distribution = distribution / X_train.sum()
+    
+    encoder = OneHotEncoder()
+    encoder.fit(np.array(data['y_train']).reshape(-1, 1))
+    
+    y_train = encoder.transform(np.array(data['y_train']).reshape(-1, 1))
+    y_test = encoder.transform(np.array(data['y_test']).reshape(-1, 1))
+    
+    train_dataset = datasets.Dataset(X_train, y_train)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    val_dataset = datasets.Dataset(X_test, y_test, vectorizer, encoder)
+    val_dataset = datasets.Dataset(X_test, y_test)
     val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
     print('Training...')
@@ -66,4 +70,7 @@ if __name__ == "__main__":
     with open(os.path.join(save_path, 'vectorizer.pkl'), 'wb') as file:
         pickle.dump(vectorizer, file)
 
+    with open(os.path.join(save_path, 'distribution.pkl'), 'wb') as file:
+        pickle.dump(distribution, file)
+    
     torch.save(model.state_dict(), os.path.join(save_path, 'model.pt'))

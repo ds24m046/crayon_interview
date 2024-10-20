@@ -56,9 +56,9 @@ class SinglePredictor(Predictor):
 
 class BatchPredictor(Predictor):
     
-    def __init__(self):
-        super().__init__()
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
     def predict(self, emails):
         
         X = self.vectorizer.transform(emails)

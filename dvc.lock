@@ -1,40 +1,44 @@
 schema: '2.0'
 stages:
   preprocess:
-    cmd: python3 src/train/preprocess.py
+    cmd: python3 src/training/preprocess.py
     deps:
     - path: data/data.csv
       hash: md5
       md5: b3c509ff1bec723e9c1f2483f709e42c
       size: 18954317
-    - path: src/train/preprocess.py
+    - path: src/training/preprocess.py
       hash: md5
       md5: 7fa334d3cad50633f991c52ff4e64a5d
       size: 2252
     outs:
     - path: artifacts/tag2idx.json
       hash: md5
-      md5: 325cf36dd4c37ad431052e3778e40462
+      md5: 1368de709afce11232a0cdd6183ddf22
       size: 110
     - path: data/data.json
       hash: md5
-      md5: 8ba80184895c27bebb3571c7afc4bce7
+      md5: 04050157a30b8c690e7811cad26ef227
       size: 11621692
   retrain:
-    cmd: python3 src/train/train.py
+    cmd: python3 src/training/train.py
     deps:
     - path: artifacts/tag2idx.json
       hash: md5
-      md5: 325cf36dd4c37ad431052e3778e40462
+      md5: 1368de709afce11232a0cdd6183ddf22
       size: 110
     - path: data/data.json
       hash: md5
-      md5: 8ba80184895c27bebb3571c7afc4bce7
+      md5: 04050157a30b8c690e7811cad26ef227
       size: 11621692
     outs:
+    - path: artifacts/distribution.pkl
+      hash: md5
+      md5: 0991def3a82458afbbb4cf7abb2dc90c
+      size: 35351
     - path: artifacts/model.pt
       hash: md5
-      md5: 30da181752810d82d722c0a822ddb832
+      md5: 91a9f1e6d416c6ef101548f3bd8b9659
       size: 48437191
     - path: artifacts/model_config.json
       hash: md5
@@ -42,5 +46,5 @@ stages:
       size: 32
     - path: artifacts/vectorizer.pkl
       hash: md5
-      md5: ef1131e237f3b06c49801df86d7cab83
+      md5: e436e12e4c8e897324296d7f2110c823
       size: 88700
