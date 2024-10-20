@@ -1,5 +1,3 @@
-import sys
-sys.path.insert(0, '..')
 from fastapi import APIRouter
 from src.application.services import predict
 from src.application.schemas.predict import SinglePredict

@@ -4,25 +4,12 @@ import json
 import torch
 import pickle
 import functools
-sys.path.insert(0, '....')
-from pymongo import MongoClient
-from datetime import datetime as dt
+from src.utils import mongo
 from src.classifier.data import cleaners
 from src.classifier.data import validators
 from src.classifier.model import classifiers
 from src.classifier.inference import predictors
 
-
-def save(email, collection):
-    
-    record = {
-        'timestamp': dt.now().isoformat(),
-        'email': email
-    }
-
-    result = collection.insert_one(record)
-    
-    return
 
 def predict(email, predictor=None):
     
@@ -43,7 +30,6 @@ def predict(email, predictor=None):
 
 
 artifacts_path = 'artifacts'
-mongo_path = os.getenv('MONGO_URI', 'mongodb://localhost:27017/emails')
 
 with open(os.path.join(artifacts_path, 'model_config.json'), 'r') as file:
     config = json.load(file)
@@ -59,10 +45,7 @@ model = classifiers.NNClassifier(**config)
 model.load_state_dict(state)
 
 predictor = predictors.SinglePredictor(model, vectorizer, tag2idx)
-
-mongo_client = MongoClient(mongo_path)
-database = mongo_client['emails']
-collection = database['emails']
-
 predict = functools.partial(predict, predictor=predictor)
-save = functools.partial(save, collection=collection)
+
+collection = mongo.get_collection('emails')
+save = functools.partial(mongo.save_email, collection=collection)
