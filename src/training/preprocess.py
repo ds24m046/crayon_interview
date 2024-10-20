@@ -52,19 +52,19 @@ def prepare_dataset(data):
     return X, y
     
 
-data_path = 'data'
-artifacts_path = "artifacts"
+input_path = 'inputs'
+output_path = "artifacts"
 test_size = 0.20
 
 if __name__ == "__main__":
     
-    if artifacts_path is None:
+    if output_path is None:
         raise ValueError('Save path must be specified!')
 
-    if not os.path.exists(artifacts_path):
+    if not os.path.exists(output_path):
         raise ValueError('Save path does not exist!')
 
-    dataset = read_dataset(os.path.join(data_path, 'data.csv'))
+    dataset = read_dataset(os.path.join(input_path, 'data.csv'))
     X, y = prepare_dataset(dataset)
 
     for email in X:
@@ -85,8 +85,8 @@ if __name__ == "__main__":
         'y_test': y_test
     }
 
-    with open(os.path.join(data_path, 'data.json'), 'w') as file:
+    with open(os.path.join(output_path, 'data.json'), 'w') as file:
         json.dump(data, file)
 
-    with open(os.path.join(artifacts_path, 'tag2idx.json'), 'w') as file:
+    with open(os.path.join(output_path, 'tag2idx.json'), 'w') as file:
         json.dump(tag2idx, file)

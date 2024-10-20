@@ -14,12 +14,12 @@ from src.classifier.model import classifiers
 n_epochs=1
 batch_size=256
 learning_rate=0.001
+input_path = 'inputs'
 save_path = 'artifacts'
-load_path = 'data'
 
 if __name__ == "__main__":
 
-    with open(os.path.join(load_path, 'data.json'), 'r') as file:
+    with open(os.path.join(save_path, 'data.json'), 'r') as file:
         data = json.load(file)
 
     with open(os.path.join(save_path, 'tag2idx.json'), 'r') as file:
@@ -74,3 +74,5 @@ if __name__ == "__main__":
         pickle.dump(distribution, file)
     
     torch.save(model.state_dict(), os.path.join(save_path, 'model.pt'))
+    
+    os.remove(os.path.join(input_path, 'data.csv'))

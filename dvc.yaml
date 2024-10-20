@@ -4,15 +4,15 @@ stages:
     cmd: python3 src/training/preprocess.py
     deps:
       - src/training/preprocess.py
-      - data/data.csv
+      - inputs/data.csv
     outs:
-      - data/data.json
+      - artifacts/data.json
       - artifacts/tag2idx.json
 
   retrain:
     cmd: python3 src/training/train.py
     deps:
-      - data/data.json
+      - artifacts/data.json
       - artifacts/tag2idx.json
     outs:
       - artifacts/model_config.json
