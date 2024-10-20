@@ -43,7 +43,7 @@ def predict(email, predictor=None):
 
 
 artifacts_path = 'artifacts'
-mongo_path = 'mongodb://localhost:27017'
+mongo_path = os.getenv('MONGO_URI', 'mongodb://localhost:27017/emails')
 
 with open(os.path.join(artifacts_path, 'model_config.json'), 'r') as file:
     config = json.load(file)
