@@ -1,0 +1,56 @@
+{
+    "AWSEBDockerrunVersion": 2,
+
+    "containerDefinitions": [
+
+        {
+            "name": "mongodb",
+            "image": "mongo:latest",
+            "essential": true,
+            "memory": 512,
+            "portMappings": [
+                {
+                    "hostPort": 27017,
+                    "containerPort": 27017
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "mongo",
+                    "containerPath": "/data/db"
+                }
+            ]
+        },
+
+        {
+            "name": "rest_service",
+            "image": "404002918936.dkr.ecr.eu-central-1.amazonaws.com/crayon_interview:latest",
+            "essential": true,
+            "memory": 512,
+            "portMappings": [
+                {
+                    "hostPort": 8000,
+                    "containerPort": 8000
+                }
+            ],
+            "environment": [
+                {
+                    "name": "MONGO_URI",
+                    "value": "mongodb://mongodb:27017/emails"
+                }
+            ],
+            "links": [
+                "mongodb"
+            ]
+        }
+    ],
+
+    "volumes": [
+        {
+            "name": "mongo",
+            "host": {
+                "sourcePath": "/ebs/mongo"
+            }
+        }
+    ]
+}
